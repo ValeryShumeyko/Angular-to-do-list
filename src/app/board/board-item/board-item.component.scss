@@ -1,0 +1,15 @@
+.item__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 255px;
+}
+.item__input {
+    max-width: 150px;
+    font-size: 14px;
+    margin: 5px 0px;
+}
+.form-input {
+    max-width: 170px;
+}
+

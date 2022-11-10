@@ -1,0 +1,19 @@
+<div class="item__container" [formGroup]="formEdit">
+    <div *ngIf="!editTodo" class="item__text">{{item.text}}</div>
+    <mat-form-field  *ngIf="editTodo" appearance="outline" class="form-input">
+        <div class="input-color"></div>
+        <input formControlName="editInput" [(ngModel)]='item.text' matInput placeholder="Редактировать" class="edit-input">
+    </mat-form-field>
+    <div class="box">
+        <button mat-icon-button color="grey" (click)="onTaskEmit(item)">
+            <mat-icon>delete</mat-icon>
+        </button>
+        <button *ngIf="!editTodo" mat-icon-button color="grey" (click)="updateToggle()">
+            <mat-icon>edit</mat-icon>
+        </button>
+        <button *ngIf="editTodo" mat-icon-button color="green" (click)="onEditEmit(item); editTodo=false" [disabled]="item.text === ''">
+            <mat-icon>done</mat-icon>
+        </button>
+    </div>
+</div>
+

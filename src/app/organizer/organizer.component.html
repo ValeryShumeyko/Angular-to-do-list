@@ -1,0 +1,67 @@
+<section (click)="addingColumn=false; formColumn.reset()">
+    <div (click)="$event.stopPropagation()" class="container-fixed">
+        <div cdkDropListGroup class="content__container">
+            <mat-card *ngFor="let column of board; let i = index" class="card">
+                <!--let column of boardService.getBoard$() | async; let i = index-->
+                <div class="card__title">
+                    <h2>{{column.title}}</h2>
+                    <button mat-icon-button color="grey" (click)="onDeleteColumn(column.id)" class="card__delete">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+                <div cdkDropList [cdkDropListData]="column.list" class="example-list"
+                    (cdkDropListDropped)="drop($event)">
+                    <div cdkDrag class="example-box" *ngFor="let item of column.list; let i = index">
+                        <app-board-item [item]="item" (emitTask)="onDeleteTask($event, column.id)" (emitEdit)="onUpdateTodo($event, column.id)">
+                        </app-board-item>
+                    </div>
+                </div>
+                <div *ngIf="!column.isOpenFormAddTask" class="add-card" (click)="column.isOpenFormAddTask=!column.isOpenFormAddTask; form.reset()">
+                    <button mat-icon-button color="grey">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                    <p>Добавить карточку</p>
+                </div>
+                <form *ngIf="column.isOpenFormAddTask" [formGroup]="form">
+                    <mat-form-field appearance="outline" class="form-input">
+                        <div class="input-color"></div>
+                        <mat-label>Заголовок</mat-label>
+                        <input formControlName="title" [(ngModel)]="column.input" matInput placeholder="Ввести заголовок для этой карточки">
+                    </mat-form-field>
+                    <div class="button__container">
+                        <button mat-raised-button color="primary" 
+                            (click)="onAddTask(column.id, text); column.input=''" 
+                            [disabled]="form.value.title===''"
+                        >Добавить карточку</button>
+                        <button mat-icon-button color="grey" (click)="column.isOpenFormAddTask=!column.isOpenFormAddTask; column.input=''">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </div>
+                </form>
+            </mat-card>
+
+            <div class="add-card add-column" (click)="addingColumn=!addingColumn" *ngIf="!addingColumn">
+                <button mat-icon-button color="white">
+                    <mat-icon>add</mat-icon>
+                </button>
+                <p>Добавьте еще одну колонку</p>
+            </div>
+            <form [formGroup]="formColumn" *ngIf="addingColumn">
+                <mat-card class="card">
+                    <mat-form-field appearance="outline" class="form-input">
+                        <div class="input-color"></div>
+                        <mat-label>Заголовок</mat-label>
+                        <input formControlName="nameColumn" matInput placeholder="Ввести заголовок списка">
+                    </mat-form-field>
+                    <div class="button__container">
+                        <button (click)="addColumn(text)" mat-raised-button color="primary"
+                            [disabled]="formColumn.invalid">Добавить список</button>
+                        <button mat-icon-button color="grey" (click)="addingColumn=!addingColumn; formColumn.reset()">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </div>
+                </mat-card>
+            </form>
+        </div>
+    </div>
+</section>
